@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import Media from "./media";
 
 export default class Canvas {
   canvas: HTMLCanvasElement;
@@ -7,6 +8,10 @@ export default class Canvas {
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
   orbitControls: OrbitControls;
+  sizes: {
+    width: number;
+    height: number;
+  };
 
   constructor() {
     this.canvas = document.querySelector("canvas.webgl") as HTMLCanvasElement;
@@ -19,7 +24,8 @@ export default class Canvas {
     this.initCamera();
     this.initOrbitControls();
     this.initRenderer();
-    this.createCube();
+    this.setSizes();
+    this.createMedia();
     this.addEventListeners();
     this.render();
   }
@@ -34,11 +40,8 @@ export default class Canvas {
     this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
   }
 
-  createCube() {
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    this.scene.add(cube);
+  createMedia() {
+    new Media({ scene: this.scene, sizes: this.sizes, canvas: this.canvas });
   }
 
   initRenderer() {
@@ -48,11 +51,22 @@ export default class Canvas {
       pixelRatio: Math.min(2, window.devicePixelRatio),
     };
 
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
     this.renderer.setSize(dimensions.width, dimensions.height);
     this.renderer.setPixelRatio(dimensions.pixelRatio);
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  setSizes() {
+    let fov = this.camera.fov * (Math.PI / 180);
+    let height = this.camera.position.z * Math.tan(fov / 2) * 2;
+    let width = height * this.camera.aspect;
+
+    this.sizes = {
+      width: width,
+      height: height,
+    };
   }
 
   // events
