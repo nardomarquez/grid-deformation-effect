@@ -1,13 +1,6 @@
+import App from "./App";
 import "./style.css";
 
-class App {
-  constructor() {
-    this.print();
-  }
-
-  print() {
-    console.log("Hello World");
-  }
-}
-
-export default new App();
+window.addEventListener("load", () => {
+  new App();
+});
