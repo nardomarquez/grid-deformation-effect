@@ -21,22 +21,22 @@ export default class Canvas {
       canvas: this.canvas,
     });
 
-    this.initCamera();
-    this.initOrbitControls();
-    this.initRenderer();
+    this.createCamera();
+    this.createOrbitControls();
+    this.createRenderer();
     this.setSizes();
     this.createMedia();
     this.addEventListeners();
     this.render();
   }
 
-  initCamera() {
+  createCamera() {
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     this.scene.add(this.camera);
     this.camera.position.z = 10;
   }
 
-  initOrbitControls() {
+  createOrbitControls() {
     this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
   }
 
@@ -44,7 +44,7 @@ export default class Canvas {
     new Media({ scene: this.scene, sizes: this.sizes, canvas: this.canvas });
   }
 
-  initRenderer() {
+  createRenderer() {
     const dimensions = {
       width: window.innerWidth,
       height: window.innerHeight,
